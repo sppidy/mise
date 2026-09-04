@@ -1,0 +1,13 @@
+node_modules
+dist
+data
+android
+.git
+.github
+artifacts
+tmp
+*.traineddata
+.env
+.env.*
+!.env.example
+*.log

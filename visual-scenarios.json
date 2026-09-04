@@ -1,0 +1,19 @@
+{
+  "viewport": {
+    "portrait": ["360x800", "412x915"],
+    "landscape": ["800x360"]
+  },
+  "themes": ["light", "dark"],
+  "fontScale": 1.0,
+  "locale": "en-US",
+  "seed": "mise-visual-fixture-v1",
+  "animationScale": 0,
+  "server": "offline",
+  "scenarios": [
+    "splash", "home", "search", "all", "quick", "vegetarian", "baking", "favorites",
+    "collections", "grocery", "empty", "detail", "checked-ingredient", "import-link",
+    "import-paste", "import-manual", "import-photo", "import-error", "import-preview",
+    "settings", "toast", "share-progress", "cook"
+  ],
+  "crop": "system-owned-bars-excluded"
+}

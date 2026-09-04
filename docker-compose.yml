@@ -1,0 +1,17 @@
+services:
+  mise:
+    build:
+      context: .
+      args:
+        VITE_SOURCE_URL: ${VITE_SOURCE_URL:-https://github.com/sppidy/mise}
+    restart: unless-stopped
+    environment:
+      OLLAMA_URL: ${OLLAMA_URL:-}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3.5:4b}
+    ports:
+      - "8787:8787"
+    volumes:
+      - mise-data:/app/data
+
+volumes:
+  mise-data:

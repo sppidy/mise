@@ -1,0 +1,18 @@
+// SPDX-FileCopyrightText: 2026 Mise contributors
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+ext {
+    minSdkVersion = 24
+    compileSdkVersion = 36
+    targetSdkVersion = 36
+    coreSplashScreenVersion = '1.2.0'
+    androidxActivityVersion = '1.11.0'
+    androidxCoreVersion = '1.17.0'
+    androidxLifecycleVersion = '2.9.3'
+    androidxDataStoreVersion = '1.1.7'
+    composeBomVersion = '2025.08.01'
+    mlKitTextVersion = '16.0.1'
+    junitVersion = '4.13.2'
+    androidxJunitVersion = '1.3.0'
+    androidxEspressoCoreVersion = '3.7.0'
+}

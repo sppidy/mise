@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest a concrete change to Mise.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is getting in your way?
+      description: Describe the workflow or limitation before proposing the interface.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

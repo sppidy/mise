@@ -1,0 +1,93 @@
+// SPDX-FileCopyrightText: 2026 Mise contributors
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
+}
+
+def generatedLegalAssets = layout.buildDirectory.dir('generated/legalAssets')
+def miseSourceUrl = providers.gradleProperty('miseSourceUrl')
+    .orElse(providers.environmentVariable('MISE_SOURCE_URL'))
+    .orElse('https://github.com/sppidy/mise')
+    .get()
+    .replaceAll('/+$', '')
+def escapedSourceUrl = miseSourceUrl.replace('\\', '\\\\').replace('"', '\\"')
+
+tasks.register('syncLegalAssets', Copy) {
+    from(rootProject.file('../LICENSE')) { into 'legal' }
+    from(rootProject.file('../LICENSE-EXCEPTION.md')) { into 'legal' }
+    from(rootProject.file('../NOTICE')) { into 'legal' }
+    from(rootProject.file('../PRIVACY.md')) { into 'legal' }
+    from(rootProject.file('../THIRD_PARTY_NOTICES.md')) { into 'legal' }
+    from(rootProject.file('../THIRD_PARTY_LICENSES')) { into 'legal/third-party-licenses' }
+    into generatedLegalAssets
+}
+
+android {
+    namespace = 'app.mise.recipebox'
+    compileSdk = rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId = 'app.mise.recipebox'
+        minSdk = rootProject.ext.minSdkVersion
+        targetSdk = rootProject.ext.targetSdkVersion
+        versionCode = 9
+        versionName = '0.1.0'
+        testInstrumentationRunner = 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField 'String', 'MISE_SOURCE_URL', "\"${escapedSourceUrl}\""
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = '17' }
+
+    packaging {
+        resources.excludes += ['/META-INF/{AL2.0,LGPL2.1}']
+    }
+
+    sourceSets {
+        main.assets.srcDir(generatedLegalAssets)
+    }
+}
+
+tasks.named('preBuild').configure { dependsOn('syncLegalAssets') }
+
+dependencies {
+    implementation platform("androidx.compose:compose-bom:${rootProject.ext.composeBomVersion}")
+    implementation 'androidx.activity:activity-compose:1.11.0'
+    implementation 'androidx.compose.runtime:runtime'
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-text-google-fonts'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.foundation:foundation'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.9.3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.3'
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation "androidx.datastore:datastore-preferences:${rootProject.ext.androidxDataStoreVersion}"
+    implementation "com.google.mlkit:text-recognition:${rootProject.ext.mlKitTextVersion}"
+
+    testImplementation "junit:junit:${rootProject.ext.junitVersion}"
+    androidTestImplementation "androidx.test.ext:junit:${rootProject.ext.androidxJunitVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.ext.androidxEspressoCoreVersion}"
+    androidTestImplementation platform("androidx.compose:compose-bom:${rootProject.ext.composeBomVersion}")
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+}

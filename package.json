@@ -1,0 +1,51 @@
+{
+  "name": "mise-recipe-box",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A self-hosted recipe box with web and native Android clients.",
+  "author": "Ramshouriesh (sppidy)",
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sppidy/mise.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sppidy/mise/issues"
+  },
+  "homepage": "https://github.com/sppidy/mise#readme",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n web,api -c cyan,green \"vite --host 0.0.0.0\" \"node --watch server/index.mjs\"",
+    "build": "tsc -b && vite build",
+    "start": "node server/index.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "check": "tsc -b",
+    "test": "node --test server/*.test.mjs shared/*.test.mjs",
+    "ci": "npm run check && npm test && npm run build",
+    "android:apk": "npm run build && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "ipaddr.js": "^2.5.0",
+    "lucide-react": "^1.39.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sharp": "^0.35.4",
+    "tesseract.js": "^7.0.0",
+    "undici": "^7.29.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.4.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^10.0.5",
+    "pngjs": "^7.0.0",
+    "typescript": "5.9.3",
+    "vite": "^8.2.2"
+  }
+}
