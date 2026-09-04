@@ -3,11 +3,10 @@
 
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.compose'
 }
 
-def generatedLegalAssets = layout.buildDirectory.dir('generated/legalAssets')
+def generatedLegalAssets = layout.buildDirectory.dir('generated/legalAssets').get().asFile
 def miseSourceUrl = providers.gradleProperty('miseSourceUrl')
     .orElse(providers.environmentVariable('MISE_SOURCE_URL'))
     .orElse('https://github.com/sppidy/mise')
@@ -84,8 +83,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = '17' }
-
     packaging {
         resources.excludes += ['/META-INF/{AL2.0,LGPL2.1}']
     }
@@ -108,7 +105,7 @@ dependencies {
     implementation 'androidx.compose.foundation:foundation'
     implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.9.3'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.3'
-    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation "androidx.core:core-ktx:${rootProject.ext.androidxCoreVersion}"
     implementation "androidx.datastore:datastore-preferences:${rootProject.ext.androidxDataStoreVersion}"
     implementation "com.google.mlkit:text-recognition:${rootProject.ext.mlKitTextVersion}"
 

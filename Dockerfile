@@ -1,4 +1,4 @@
-FROM docker.io/library/node:24-alpine AS build
+FROM docker.io/library/node:26-alpine AS build
 WORKDIR /app
 ARG VITE_SOURCE_URL=https://github.com/sppidy/mise
 ENV VITE_SOURCE_URL=$VITE_SOURCE_URL
@@ -7,7 +7,7 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM docker.io/library/node:24-alpine AS runtime
+FROM docker.io/library/node:26-alpine AS runtime
 WORKDIR /app
 LABEL org.opencontainers.image.source="https://github.com/sppidy/mise" \
       org.opencontainers.image.licenses="AGPL-3.0-or-later"
