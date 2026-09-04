@@ -14,6 +14,21 @@ def miseSourceUrl = providers.gradleProperty('miseSourceUrl')
     .get()
     .replaceAll('/+$', '')
 def escapedSourceUrl = miseSourceUrl.replace('\\', '\\\\').replace('"', '\\"')
+def signingPropertiesFile = rootProject.file('keystore.properties')
+def signingProperties = new Properties()
+if (signingPropertiesFile.exists()) {
+    signingPropertiesFile.withInputStream { signingProperties.load(it) }
+}
+def releaseKeystorePath = providers.environmentVariable('MISE_KEYSTORE_PATH').orNull ?: signingProperties.getProperty('storeFile')
+def releaseStorePassword = providers.environmentVariable('MISE_KEYSTORE_PASSWORD').orNull ?: signingProperties.getProperty('storePassword')
+def releaseKeyAlias = providers.environmentVariable('MISE_KEY_ALIAS').orNull ?: signingProperties.getProperty('keyAlias')
+def releaseKeyPassword = providers.environmentVariable('MISE_KEY_PASSWORD').orNull ?: signingProperties.getProperty('keyPassword')
+def releaseSigningValues = [releaseKeystorePath, releaseStorePassword, releaseKeyAlias, releaseKeyPassword]
+def releaseSigningRequested = signingPropertiesFile.exists() || releaseSigningValues.any { it != null }
+def releaseSigningConfigured = releaseSigningValues.every { it != null && !it.isBlank() }
+if (releaseSigningRequested && !releaseSigningConfigured) {
+    throw new GradleException('Release signing requires a keystore path, store password, key alias, and key password')
+}
 
 tasks.register('syncLegalAssets', Copy) {
     from(rootProject.file('../LICENSE')) { into 'legal' }
@@ -29,6 +44,17 @@ android {
     namespace = 'app.mise.recipebox'
     compileSdk = rootProject.ext.compileSdkVersion
 
+    signingConfigs {
+        if (releaseSigningConfigured) {
+            release {
+                storeFile = file(releaseKeystorePath)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
     defaultConfig {
         applicationId = 'app.mise.recipebox'
         minSdk = rootProject.ext.minSdkVersion
@@ -42,6 +68,9 @@ android {
 
     buildTypes {
         release {
+            if (releaseSigningConfigured) {
+                signingConfig = signingConfigs.release
+            }
             minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

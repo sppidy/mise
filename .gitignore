@@ -19,6 +19,7 @@ android/local.properties
 android/keystore.properties
 *.jks
 *.keystore
+*.p12
 android/app/google-services.json
 .DS_Store
 *.log

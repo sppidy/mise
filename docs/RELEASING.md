@@ -37,6 +37,25 @@ Create the signed APK or app bundle with a maintainer-owned key. Keep the keysto
 
 The Android build copies the AGPL, linking exception, privacy policy, and third-party notices into the APK assets under `legal/`.
 
+For local signing, either place an ignored `keystore.properties` file in `android/` or provide these environment variables:
+
+```properties
+storeFile=/absolute/path/to/mise-release.p12
+storePassword=...
+keyAlias=mise-release
+keyPassword=...
+```
+
+```sh
+MISE_KEYSTORE_PATH=/absolute/path/to/mise-release.p12 \
+MISE_KEYSTORE_PASSWORD=... \
+MISE_KEY_ALIAS=mise-release \
+MISE_KEY_PASSWORD=... \
+./gradlew assembleRelease bundleRelease
+```
+
+The `Android release` workflow uses the repository secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, and `ANDROID_KEY_PASSWORD`. A published GitHub release triggers a signed build and attaches the verified APK, AAB, and `SHA256SUMS`. A manual workflow run builds the same files as workflow artifacts without modifying a GitHub release. Keep a tested offline backup of the keystore and its credentials; losing them prevents compatible updates signed with the same key.
+
 ## Publish
 
 Create a signed Git tag using the same version as the package metadata. Publish from a clean checkout, then attach:
