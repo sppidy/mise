@@ -3,11 +3,11 @@
 
 ext {
     minSdkVersion = 24
-    compileSdkVersion = 36
+    compileSdkVersion = 37
     targetSdkVersion = 36
     coreSplashScreenVersion = '1.2.0'
     androidxActivityVersion = '1.11.0'
-    androidxCoreVersion = '1.17.0'
+    androidxCoreVersion = '1.19.0'
     androidxLifecycleVersion = '2.9.3'
     androidxDataStoreVersion = '1.1.7'
     composeBomVersion = '2025.08.01'
