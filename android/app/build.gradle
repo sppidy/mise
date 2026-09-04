@@ -79,7 +79,7 @@ dependencies {
     implementation 'androidx.compose.foundation:foundation'
     implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.9.3'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.3'
-    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.core:core-ktx:1.19.0'
     implementation "androidx.datastore:datastore-preferences:${rootProject.ext.androidxDataStoreVersion}"
     implementation "com.google.mlkit:text-recognition:${rootProject.ext.mlKitTextVersion}"
 
